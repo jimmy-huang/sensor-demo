@@ -16,6 +16,7 @@
     <meta name="viewport" content="width=device-width">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#FF4081">
+    <meta name="mobile-web-app-capable" content="yes">
     <style>
       body {
         margin: 0px;
@@ -199,6 +200,9 @@
           <br></br>
         </div>
         <br></br>
+      <div id="panel">
+        <paper-button id="connectBtn" on-click="onConnectBtnClick">[[buttonTitle]]</paper-button>
+      </div>
         <div id="console" class="flex">
           <iron-list class="messages" items="[[consoleLines]]" as="item">
             <template>
@@ -219,9 +223,6 @@
             </template>
           </div>
         </div>
-      </div>
-      <div id="panel">
-        <paper-button id="connectBtn" on-click="onConnectBtnClick">[[buttonTitle]]</paper-button>
       </div>
   </template>
 
@@ -451,7 +452,9 @@
             filters: [
               { name: 'Edison' },
               { name: 'Zephyr' },
-              { name: 'Arduino101' }
+              { name: 'Arduino101' },
+              { name: 'Geoff101' },
+              { name: 'Geoff' }
             ],
             optionalServices: [0xFC00]
           }).then(device => {
