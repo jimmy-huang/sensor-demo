@@ -1,0 +1,17 @@
+{
+  "name": "webbluetooth-edison-demo",
+  "private": true,
+  "devDependencies": {
+    "glob-all": "^3.0.1",
+    "gulp": "^3.8.5",
+    "run-sequence": "^1.0.2",
+    "http2-push-manifest": "^1.0.0"
+  },
+  "scripts": {
+    "build": "gulp",
+    "push": "http2-push-manifest -f app/index.html"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}
