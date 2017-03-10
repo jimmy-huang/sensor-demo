@@ -39,7 +39,7 @@
         "sizes": "512x512",
         "type": "image/png"
       }],
-  "start_url": "/demo/index.html",
+  "start_url": "/",
   "background_color": "#303F9F",
   "display": "standalone",
   "theme_color": "#FF4081"
