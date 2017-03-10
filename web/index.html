@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Accelerometer and Gyroscope Sensor Data (Web Bluetooth)</title>
+    <title>Sensor Readings</title>
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <script src="smoothie.js"></script>
     <link rel="import" href="bower_components/polymer/polymer.html">
@@ -23,9 +23,6 @@
         overflow: hidden;
       }
     </style>
-
-    <!-- Origin Trial Token, feature = Web Bluetooth, origin = https://edison-webbt.appspot.com, expires = 2016-09-07 -->
-    <meta http-equiv="origin-trial" content="Aiy5b7S2+FCLy5WGf9A5aGnCIfc7MsW+tCrnRBJBgeK3ioSrawC/shHL84lFTGe1lWffWxMNrN3S+wtKeIPuLwwAAABjeyJvcmlnaW4iOiAiaHR0cHM6Ly9lZGlzb24td2ViYnQuYXBwc3BvdC5jb206NDQzIiwgImZlYXR1cmUiOiAiV2ViQmx1ZXRvb3RoIiwgImV4cGlyeSI6IDE0NzMyNTg1NjJ9" />
 
   </head>
 
@@ -397,7 +394,7 @@
           else
               this.updateGyroscopeSensor(x, y, z);
         },
-        updateAccelerometerSensor: function(x, y, z) { 
+        updateAccelerometerSensor: function(x, y, z) {
           //document.querySelector('#aX').innerHTML = x.toFixed(4);
           //document.querySelector('#aY').innerHTML = y.toFixed(4);
           //document.querySelector('#aZ').innerHTML = z.toFixed(4);
@@ -407,7 +404,7 @@
           let date = (new Date()).toString().replace(/^.* (\d+:\d+:\d+).*$/, (match, p) => p);
           //document.querySelector('#update').innerHTML = `(Last Updated: ${date})`;
         },
-        updateGyroscopeSensor: function(x, y, z) { 
+        updateGyroscopeSensor: function(x, y, z) {
           //document.querySelector('#gX').innerHTML = x.toFixed(4);
           //document.querySelector('#gY').innerHTML = y.toFixed(4);
           //document.querySelector('#gZ').innerHTML = z.toFixed(4);
