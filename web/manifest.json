@@ -1,6 +1,6 @@
 {
-  "name": "Sensor Demo (Web Bluetooth)",
-  "short_name": "Sensor Demo",
+  "name": "Sensor Readings with WebBluetooth",
+  "short_name": "Sensor Readings",
   "icons": [
       {
         "src": "images/48.png",

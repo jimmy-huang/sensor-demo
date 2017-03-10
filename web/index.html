@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Accelerometer and Gyroscope Sensor Data (Web Bluetooth)</title>
+    <title>Sensor Readings</title>
     <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <script src="smoothie.js"></script>
     <link rel="import" href="bower_components/polymer/polymer.html">
@@ -343,12 +343,12 @@
           else
               this.updateGyroscopeSensor(x, y, z);
         },
-        updateAccelerometerSensor: function(x, y, z) { 
+        updateAccelerometerSensor: function(x, y, z) {
           accelX.append(new Date().getTime(), x.toFixed(2));
           accelY.append(new Date().getTime(), y.toFixed(2));
           accelZ.append(new Date().getTime(), z.toFixed(2));
         },
-        updateGyroscopeSensor: function(x, y, z) { 
+        updateGyroscopeSensor: function(x, y, z) {
           gyroX.append(new Date().getTime(), x.toFixed(2));
           gyroY.append(new Date().getTime(), y.toFixed(2));
           gyroZ.append(new Date().getTime(), z.toFixed(2));
