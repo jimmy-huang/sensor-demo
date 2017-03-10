@@ -1,7 +1,8 @@
 {
-  "name": "edison-webbluetooth-demo",
-  "homepage": "https://github.com/01org/edison-webbluetooth-demo",
+  "name": "sensor-readings",
+  "homepage": "",
   "authors": [
+    "Jimmy Huang <jimmy.huang@intel.com>",
     "Kenneth Rohde Christiansen <kenneth.r.christiansen@intel.com>"
   ],
   "description": "",

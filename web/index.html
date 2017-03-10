@@ -6,15 +6,14 @@
     <script src="smoothie.js"></script>
     <link rel="import" href="bower_components/polymer/polymer.html">
     <link rel="import" href="bower_components/paper-button/paper-button.html">
-    <link rel="import" href="paper-color-picker/paper-color-input.html">
     <link rel="import" href="bower_components/paper-spinner/paper-spinner.html">
     <link rel="import" href="bower_components/paper-toast/paper-toast.html">
     <link rel="import" href="bower_components/iron-list/iron-list.html">
     <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-    <link rel="import" href="bower_components/platinum-sw/platinum-sw-cache.html">
-    <link rel="import" href="bower_components/platinum-sw/platinum-sw-register.html">
+    <link rel="import" href="bower_components/paper-styles/typography.html">
     <meta name="viewport" content="width=device-width">
     <link rel="manifest" href="manifest.json">
+    <link rel="serviceworker" href="sw.js">
     <meta name="theme-color" content="#FF4081">
     <meta name="mobile-web-app-capable" content="yes">
     <style>
@@ -23,10 +22,6 @@
         overflow: hidden;
       }
     </style>
-
-    <!-- Origin Trial Token, feature = Web Bluetooth, origin = https://edison-webbt.appspot.com, expires = 2016-09-07 -->
-    <meta http-equiv="origin-trial" content="Aiy5b7S2+FCLy5WGf9A5aGnCIfc7MsW+tCrnRBJBgeK3ioSrawC/shHL84lFTGe1lWffWxMNrN3S+wtKeIPuLwwAAABjeyJvcmlnaW4iOiAiaHR0cHM6Ly9lZGlzb24td2ViYnQuYXBwc3BvdC5jb206NDQzIiwgImZlYXR1cmUiOiAiV2ViQmx1ZXRvb3RoIiwgImV4cGlyeSI6IDE0NzMyNTg1NjJ9" />
-
   </head>
 
   <dom-module id="main-app">
@@ -38,8 +33,8 @@
         height: 100vh;
         width: 100vw;
         background-color: #fafafa;
-        @apply(--paper-font-body1);
-        @apply(--vertical-layout);
+        @apply --paper-font-body1;
+        @apply --vertical-layout;
       }
 
       .messages {
@@ -87,33 +82,20 @@
         background-color: white;
       }
 
-      #sensor {
-        @apply(--paper-font-title);
-        font-size: 10pt;
-      }
-
-      .accel-sensor {
-        float: left;
-      }
-
-      .gyro-sensor {
-        float: right;
-      }
-
       #aX, #gX {
-        color: #FF0000;
+        color: red;
       }
 
       #aY, #gY {
-        color: #00FF00;
+        color: green;
       }
 
       #aZ, #gZ {
-        color: #0000FF;
+        color: blue;
       }
 
       #update {
-        color: #727272;
+        color: gray;
       }
 
       paper-button {
@@ -158,51 +140,51 @@
         @apply(--layout-end-justified);
       }
 
+      .chart-group {
+        display: flex;
+        margin: 10px;
+      }
+
+      .chart {
+        display: flex;
+        flex-direction: column;
+        @apply --paper-font-title;
+        font-size: 10pt;
+        margin: 5px;
+      }
+
     </style>
       <div id="main">
-        <div style="margin: 10px;">
-          <div id="sensor">
-            <div class="accel-sensor">Accelerometer X-Axis</div>
-            <div class="gyro-sensor">Gyroscope X-Axis</div>
-            <br/>
+        <div class="chart-group">
+          <div class="chart">
+            <div>Accelerometer X-Axis</div>
             <canvas id="accelXChart" width="180" height="100"></canvas>
-            <canvas id="gyroXChart" width="180" height="100"></canvas>
-            <br/>
-            <div class="accel-sensor">Accelerometer Y-Axis</div>
-            <div class="gyro-sensor">Gyroscope Y-Axis</div>
-            <br/>
-            <canvas id="accelYChart" width="180" height="100"></canvas>
-            <canvas id="gyroYChart" width="180" height="100"></canvas>
-            <br/>
-            <div class="accel-sensor">Accelerometer Z-Axis</div>
-            <div class="gyro-sensor">Gyroscope Z-Axis</div>
-            <br/>
-            <canvas id="accelZChart" width="180" height="100"></canvas>
-            <canvas id="gyroZChart" width="180" height="100"></canvas>
-            <br/>
-<!--
-            <div class="accel-sensor">
-            Accelerometer:
-            <br/>
-            X: <span id="aX">N/A</span>&deg; Y: <span id="aY">N/A</span>&deg; Z: <span id="aZ">N/A</span>&deg;
-            </div>
-            <div class="gyro-sensor">
-            Gyroscope:
-            <br/>
-            Y: <span id="gX">N/A</span>&deg; Y: <span id="gY">N/A</span>&deg; Z: <span id="gZ">N/A</span>&deg;
-            </div>
-            <br/>
--->
           </div>
-<!--
-          <div id="update">(not updated yet)</div>
--->
-          <br></br>
+          <div class="chart" style="text-align: right">
+            <div>Gyroscope X-Axis</div>
+            <canvas id="gyroXChart" width="180" height="100"></canvas>
+          </div>
         </div>
-        <br></br>
-      <div id="panel">
-        <paper-button id="connectBtn" on-click="onConnectBtnClick">[[buttonTitle]]</paper-button>
-      </div>
+        <div class="chart-group">
+          <div class="chart">
+            <div>Accelerometer Y-Axis</div>
+            <canvas id="accelYChart" width="180" height="100"></canvas>
+          </div>
+          <div class="chart" style="text-align: right">
+            <div>Gyroscope Y-Axis</div>
+            <canvas id="gyroYChart" width="180" height="100"></canvas>
+          </div>
+        </div>
+        <div class="chart-group">
+          <div class="chart">
+            <div>Accelerometer Z-Axis</div>
+            <canvas id="accelZChart" width="180" height="100"></canvas>
+          </div>
+          <div class="chart" style="text-align: right">
+            <div>Gyroscope Z-Axis</div>
+            <canvas id="gyroZChart" width="180" height="100"></canvas>
+          </div>
+        </div>
         <div id="console" class="flex">
           <iron-list class="messages" items="[[consoleLines]]" as="item">
             <template>
@@ -224,6 +206,9 @@
           </div>
         </div>
       </div>
+      <div id="panel">
+        <paper-button id="connectBtn" on-click="onConnectBtnClick">[[buttonTitle]]</paper-button>
+      </div>
   </template>
 
   <script>
@@ -237,19 +222,24 @@
       var gyroY = new TimeSeries();
       var gyroZ = new TimeSeries();
 
-/*
-      // for testing
-      setInterval(function() {
-        accelX.append(new Date().getTime(), Math.random() * 10);
-        accelY.append(new Date().getTime(), Math.random() * 10);
-        accelZ.append(new Date().getTime(), Math.random() * 10);
-        gyroX.append(new Date().getTime(), Math.random() * 10);
-        gyroY.append(new Date().getTime(), Math.random() * 10);
-        gyroZ.append(new Date().getTime(), Math.random() * 10);
-      }, 500);
-*/
+      let params = new URLSearchParams(new URL(window.location.href).search.slice(1));
+      let testing = params.get("testing");
+
+      // Add '?testing=true' to the URL for testing purposes
+      if (testing) {
+        // for testing
+        setInterval(function() {
+          accelX.append(new Date().getTime(), Math.random() * 10);
+          accelY.append(new Date().getTime(), Math.random() * 10);
+          accelZ.append(new Date().getTime(), Math.random() * 10);
+          gyroX.append(new Date().getTime(), Math.random() * 10);
+          gyroY.append(new Date().getTime(), Math.random() * 10);
+          gyroZ.append(new Date().getTime(), Math.random() * 10);
+        }, 500);
+      }
+
       function resizeCanvas() {
-        var margin = 15;
+        var margin = 20;
         var width = window.innerWidth / 2 - margin;
         document.getElementById("accelXChart").width = width;
         document.getElementById("accelYChart").width = width;
@@ -260,7 +250,7 @@
       }
 
       function createTimeline() {
-        var accelXChart = new SmoothieChart({
+        const accelXChart = new SmoothieChart({
             grid: { fillStyle: 'rgba(0,0,0,0.30)' },
             maxValue: 50,
             minValue:-1
@@ -268,7 +258,7 @@
         accelXChart.addTimeSeries(accelX, { strokeStyle: 'rgba(255, 0, 0, 1)', lineWidth: 2 });
         accelXChart.streamTo(document.getElementById("accelXChart"), 500);
 
-        var accelYChart = new SmoothieChart({
+        const accelYChart = new SmoothieChart({
             grid: { fillStyle: 'rgba(0,0,0,0.30)' },
             maxValue: 50,
             minValue: -1
@@ -276,7 +266,7 @@
         accelYChart.addTimeSeries(accelY, { strokeStyle: 'rgba(0, 255, 0, 1)', lineWidth: 2 });
         accelYChart.streamTo(document.getElementById("accelYChart"), 500);
 
-        var accelZChart = new SmoothieChart({
+        const accelZChart = new SmoothieChart({
             grid: { fillStyle: 'rgba(0,0,0,0.30)' },
             maxValue: 50,
             minValue: -1
@@ -284,21 +274,21 @@
         accelZChart.addTimeSeries(accelZ, { strokeStyle: 'rgba(0, 0, 255, 1)', lineWidth: 2 });
         accelZChart.streamTo(document.getElementById("accelZChart"), 500);
 
-        var gyroXChart = new SmoothieChart({
+        const gyroXChart = new SmoothieChart({
             maxValue: 10,
             minValue: -1
         });
         gyroXChart.addTimeSeries(gyroX, { strokeStyle: 'rgba(255, 0, 0, 1)', lineWidth: 2 });
         gyroXChart.streamTo(document.getElementById("gyroXChart"), 500);
 
-        var gyroYChart = new SmoothieChart({
+        const gyroYChart = new SmoothieChart({
             maxValue: 10,
             minValue: -1
         });
         gyroYChart.addTimeSeries(gyroY, { strokeStyle: 'rgba(0, 255, 0, 1)', lineWidth: 2 });
         gyroYChart.streamTo(document.getElementById("gyroYChart"), 500);
 
-        var gyroZChart = new SmoothieChart({
+        const gyroZChart = new SmoothieChart({
             maxValue: 10,
             minValue: -1
         });
@@ -306,54 +296,12 @@
         gyroZChart.streamTo(document.getElementById("gyroZChart"), 500);
       }
 
-      function toHexColor(colorStr) {
-        let a = document.createElement('div');
-        a.style.color = colorStr;
-
-        // Unknown color, let's try adding # in front.
-        if (a.style.color === "")
-          a.style.color = `#${colorStr}`;
-
-        let style = window.getComputedStyle(document.body.appendChild(a));
-        let colors = style.color.match(/\d+/g).map(a => parseInt(a, 10));
-        console.log("toUint8ArrayFromHexColor " + JSON.stringify(colors));
-
-        document.body.removeChild(a);
-
-        return new Uint8Array(colors);
-      }
-
-      String.prototype.padStart = function (maxLength, fillString=' ') {
-        let str = String(this);
-        if (str.length >= maxLength) {
-          return str;
-        }
-
-        fillString = String(fillString);
-        if (fillString.length === 0) {
-          fillString = ' ';
-        }
-
-        let fillLen = maxLength - str.length;
-        let timesToRepeat = Math.ceil(fillLen / fillString.length);
-        let truncatedStringFiller = fillString
-          .repeat(timesToRepeat)
-          .slice(0, fillLen);
-        return truncatedStringFiller + str;
-      };
-
       window.onload = () => {
-        var app = document.querySelector('#app');
         createTimeline();
         resizeCanvas();
-
-        app.displayInstalledToast = function() {
-          if (!document.querySelector('platinum-sw-cache').disabled) {
-            document.querySelector('#caching-complete').show();
-          }
-        };
-
       }
+
+      window.onresize = () => resizeCanvas();
 
       Polymer({
         is: 'main-app',
@@ -376,9 +324,7 @@
           this.sensorCharacteristic = null;
         },
         log: function(text, hexColor) {
-          //if (hexColor)
-          //  hexColor = "background: " + hexColor + ";";
-          //this.push('consoleLines', { value: text, type: "log", color: hexColor });
+          this.push('consoleLines', { value: text, type: "log" });
         },
         error: function(text) {
           this.push('consoleLines', { value: text, type: "error" });
@@ -398,24 +344,14 @@
               this.updateGyroscopeSensor(x, y, z);
         },
         updateAccelerometerSensor: function(x, y, z) { 
-          //document.querySelector('#aX').innerHTML = x.toFixed(4);
-          //document.querySelector('#aY').innerHTML = y.toFixed(4);
-          //document.querySelector('#aZ').innerHTML = z.toFixed(4);
           accelX.append(new Date().getTime(), x.toFixed(2));
           accelY.append(new Date().getTime(), y.toFixed(2));
           accelZ.append(new Date().getTime(), z.toFixed(2));
-          let date = (new Date()).toString().replace(/^.* (\d+:\d+:\d+).*$/, (match, p) => p);
-          //document.querySelector('#update').innerHTML = `(Last Updated: ${date})`;
         },
         updateGyroscopeSensor: function(x, y, z) { 
-          //document.querySelector('#gX').innerHTML = x.toFixed(4);
-          //document.querySelector('#gY').innerHTML = y.toFixed(4);
-          //document.querySelector('#gZ').innerHTML = z.toFixed(4);
           gyroX.append(new Date().getTime(), x.toFixed(2));
           gyroY.append(new Date().getTime(), y.toFixed(2));
           gyroZ.append(new Date().getTime(), z.toFixed(2));
-          let date = (new Date()).toString().replace(/^.* (\d+:\d+:\d+).*$/, (match, p) => p);
-          //document.querySelector('#update').innerHTML = `(Last Updated: ${date})`;
         },
         onConnectBtnClick() {
           switch(this.buttonTitle) {
@@ -450,11 +386,11 @@
           this.log('Requesting Bluetooth Device...');
           return navigator.bluetooth.requestDevice({
             filters: [
-              { name: 'Edison' },
               { name: 'Zephyr' },
               { name: 'Arduino101' },
               { name: 'Geoff101' },
-              { name: 'Geoff' }
+              { name: 'Geoff' },
+              { name: 'Intel Curie' }
             ],
             optionalServices: [0xFC00]
           }).then(device => {
@@ -471,7 +407,7 @@
             this.sensorCharacteristic.addEventListener(
               'characteristicvaluechanged', this.onSensorChange.bind(this));
 
-            this.log("Starting bmi160 sensor notifications.");
+            this.log("Starting BMI160 sensor notifications.");
             return this.sensorCharacteristic.startNotifications();
           });
         },
@@ -520,19 +456,5 @@
 
   <body unresolved fullbleed>
     <main-app></main-app>
-
-    <template is="dom-bind" id="app">
-      <paper-toast id="caching-complete"
-          duration="6000"
-          text="This app will work offline.">
-      </paper-toast>
-      <platinum-sw-register auto-register
-          on-service-worker-installed="displayInstalledToast">
-        <platinum-sw-cache
-            default-cache-strategy="fastest"
-             cache-config-file="cache-config.json"
-        ></platinum-sw-cache>
-      </platinum-sw-register>
-    </template>
   </body>
 </html>
