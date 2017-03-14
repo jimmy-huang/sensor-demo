@@ -19,6 +19,7 @@
     <style>
       body {
         margin: 0px;
+        height: 100vh;
         overflow: hidden;
       }
     </style>
@@ -28,13 +29,13 @@
   <template>
     <style is="custom-style" include="iron-flex iron-flex-alignment">
       :host {
-        display: block;
+        display: flex;
         box-sizing: border-box;
-        height: 100vh;
-        width: 100vw;
+        height: 100%;
+        width: 100%;
         background-color: #fafafa;
         @apply --paper-font-body1;
-        @apply --vertical-layout;
+        flex-direction: column;
       }
 
       .messages {
@@ -43,7 +44,7 @@
         word-wrap: break-word;
         -webkit-user-select: text;
         border-top: 1px solid rgb(230, 230, 230);
-        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
       }
 
       .consoleLine {
@@ -129,15 +130,16 @@
       #main {
         overflow: scroll;
         -webkit-overflow-scrolling: touch;
-        height: calc(100vh - 60px);
+        flex-grow: 1;
       }
 
       #panel {
         padding: 10px;
+        min-height: 40px;
         border-top: 1px solid rgb(230, 230, 230);
         background-color: #303F9F;
-        @apply(--layout-horizontal);
-        @apply(--layout-end-justified);
+        display: flex;
+        justify-content: flex-end;
       }
 
       .chart-group {
@@ -253,7 +255,7 @@
         const accelXChart = new SmoothieChart({
             grid: { fillStyle: 'rgba(0,0,0,0.30)' },
             maxValue: 50,
-            minValue:-1
+            minValue: -50
         });
         accelXChart.addTimeSeries(accelX, { strokeStyle: 'rgba(255, 0, 0, 1)', lineWidth: 2 });
         accelXChart.streamTo(document.getElementById("accelXChart"), 500);
@@ -261,7 +263,7 @@
         const accelYChart = new SmoothieChart({
             grid: { fillStyle: 'rgba(0,0,0,0.30)' },
             maxValue: 50,
-            minValue: -1
+            minValue: -50
         });
         accelYChart.addTimeSeries(accelY, { strokeStyle: 'rgba(0, 255, 0, 1)', lineWidth: 2 });
         accelYChart.streamTo(document.getElementById("accelYChart"), 500);
@@ -269,28 +271,28 @@
         const accelZChart = new SmoothieChart({
             grid: { fillStyle: 'rgba(0,0,0,0.30)' },
             maxValue: 50,
-            minValue: -1
+            minValue: -50
         });
         accelZChart.addTimeSeries(accelZ, { strokeStyle: 'rgba(0, 0, 255, 1)', lineWidth: 2 });
         accelZChart.streamTo(document.getElementById("accelZChart"), 500);
 
         const gyroXChart = new SmoothieChart({
             maxValue: 10,
-            minValue: -1
+            minValue: -10
         });
         gyroXChart.addTimeSeries(gyroX, { strokeStyle: 'rgba(255, 0, 0, 1)', lineWidth: 2 });
         gyroXChart.streamTo(document.getElementById("gyroXChart"), 500);
 
         const gyroYChart = new SmoothieChart({
             maxValue: 10,
-            minValue: -1
+            minValue: -10
         });
         gyroYChart.addTimeSeries(gyroY, { strokeStyle: 'rgba(0, 255, 0, 1)', lineWidth: 2 });
         gyroYChart.streamTo(document.getElementById("gyroYChart"), 500);
 
         const gyroZChart = new SmoothieChart({
             maxValue: 10,
-            minValue: -1
+            minValue: -10
         });
         gyroZChart.addTimeSeries(gyroZ, { strokeStyle: 'rgba(0, 0, 255, 1)', lineWidth: 2 });
         gyroZChart.streamTo(document.getElementById("gyroZChart"), 500);
@@ -334,10 +336,14 @@
         },
         onSensorChange: function(event) {
           let data = event.target.value;
-          let isAccel = data.getUint8(0);
-          let x = data.getUint32(1) / 10000;
-          let y = data.getUint32(5) / 10000;
-          let z = data.getUint32(9) / 10000;
+
+          const multi = 2 ** (32 - 14); // 14 bit precision.
+
+          const isAccel = data.getUint8(0);
+          const x = (data.getUint32(1) << 1) / multi;
+          const y = (data.getUint32(5) << 1) / multi;
+          const z = (data.getUint32(9) << 1) / multi;
+
           if (isAccel)
               this.updateAccelerometerSensor(x, y, z);
           else
