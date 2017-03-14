@@ -254,45 +254,45 @@
       function createTimeline() {
         const accelXChart = new SmoothieChart({
             grid: { fillStyle: 'rgba(0,0,0,0.30)' },
-            maxValue: 50,
-            minValue: -50
+            maxValue: 30,
+            minValue: -30
         });
         accelXChart.addTimeSeries(accelX, { strokeStyle: 'rgba(255, 0, 0, 1)', lineWidth: 2 });
         accelXChart.streamTo(document.getElementById("accelXChart"), 500);
 
         const accelYChart = new SmoothieChart({
             grid: { fillStyle: 'rgba(0,0,0,0.30)' },
-            maxValue: 50,
-            minValue: -50
+            maxValue: 30,
+            minValue: -30
         });
         accelYChart.addTimeSeries(accelY, { strokeStyle: 'rgba(0, 255, 0, 1)', lineWidth: 2 });
         accelYChart.streamTo(document.getElementById("accelYChart"), 500);
 
         const accelZChart = new SmoothieChart({
             grid: { fillStyle: 'rgba(0,0,0,0.30)' },
-            maxValue: 50,
-            minValue: -50
+            maxValue: 30,
+            minValue: -30
         });
         accelZChart.addTimeSeries(accelZ, { strokeStyle: 'rgba(0, 0, 255, 1)', lineWidth: 2 });
         accelZChart.streamTo(document.getElementById("accelZChart"), 500);
 
         const gyroXChart = new SmoothieChart({
-            maxValue: 10,
-            minValue: -10
+            maxValue: 5,
+            minValue: -5
         });
         gyroXChart.addTimeSeries(gyroX, { strokeStyle: 'rgba(255, 0, 0, 1)', lineWidth: 2 });
         gyroXChart.streamTo(document.getElementById("gyroXChart"), 500);
 
         const gyroYChart = new SmoothieChart({
-            maxValue: 10,
-            minValue: -10
+            maxValue: 5,
+            minValue: -5
         });
         gyroYChart.addTimeSeries(gyroY, { strokeStyle: 'rgba(0, 255, 0, 1)', lineWidth: 2 });
         gyroYChart.streamTo(document.getElementById("gyroYChart"), 500);
 
         const gyroZChart = new SmoothieChart({
-            maxValue: 10,
-            minValue: -10
+            maxValue: 5,
+            minValue: -5
         });
         gyroZChart.addTimeSeries(gyroZ, { strokeStyle: 'rgba(0, 0, 255, 1)', lineWidth: 2 });
         gyroZChart.streamTo(document.getElementById("gyroZChart"), 500);
